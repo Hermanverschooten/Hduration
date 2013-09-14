@@ -1,5 +1,5 @@
 = Project
-Duration <http://rubyforge.org/projects/duration>
+Hduration <http://rubyforge.org/projects/duration>
 
 = Original Author
 Matthew Harris <matt@matthewharris.org>
@@ -11,14 +11,14 @@ Patrick Robertson <patrick.robertson@velir.com>
 Herman verschooten <Herman@verschooten.net>
 
 = Synopsis
-Duration objects are simple mechanisms that allow you to operate on durations
+Hduration objects are simple mechanisms that allow you to operate on durations
 of time.
 
 They allow you to know how much time has passed since a certain
 point in time, or they can tell you how much time something is (when given as
 seconds) in different units of time measurement.
 
-Durations would particularly be useful for those scripts or applications that
+Hdurations would particularly be useful for those scripts or applications that
 allow you to know the uptime of themselves or perhaps provide a countdown until
 a certain event.
 
@@ -26,13 +26,13 @@ As of version 0.1.0, the duration library has been completely rewritten with
 better knowledge.
 
 = Features
-Duration is packed with many features and has plans for many more.
+Hduration is packed with many features and has plans for many more.
 
 === Current features
-* Duck typing objects to work with Duration
+* Duck typing objects to work with Hduration
 * Localization support of formatted strings (feel free to submit your own!)
 * Capability to compare durations to any object (duck typing)
-* Arithmetic operations from Duration instances are legal (duck typing)
+* Arithmetic operations from Hduration instances are legal (duck typing)
 * Convenience methods for creating durations from Time objects
 
 === Soon to come features
@@ -52,21 +52,21 @@ Thanks!
 
 = Usage
 Using the duration library is fairly simple and straight-forward.  The base
-class most of you will be using is the Duration class.
+class most of you will be using is the Hduration class.
 
 === Initialization
-There are two ways to initialize the Duration class.  One way is to pass an
+There are two ways to initialize the Hduration class.  One way is to pass an
 object capable of responding to the #to_i method.  That object is expected to
 return an integer or float that represents the number of seconds for the
 duration object.
 
-The second way to initialize the Duration class is to pass a key=>value paired
+The second way to initialize the Hduration class is to pass a key=>value paired
 Hash object.  The hash's keys will be scanned for units of measurement defiend
-in Duration::UNITS or (the keys of) Duration::MULTIPLES.
+in Hduration::UNITS or (the keys of) Hduration::MULTIPLES.
 
 Here's an example of using the formerly mentioned solution:
-    duration = Duration.new(Time.now)
-    => #<Duration: 1981 weeks, 3 hours, 50 minutes and 44 seconds>
+    duration = Hduration.new(Time.now)
+    => #<Hduration: 1981 weeks, 3 hours, 50 minutes and 44 seconds>
 
 As you can see, it gave us the duration since the UNIX epoch.  This works fine
 because Time objects respond to the #to_i method.  And Time#to_i returns a
@@ -74,32 +74,32 @@ UNIX timestamp (which is the number of seconds that have passed since the UNIX
 epoch, January 1, 1970).
 
 Before I move on to demonstrating the second solution, I'd like to note that
-there are Time#to_duration, Time#duration and Duration.since_epoch for
+there are Time#to_duration, Time#duration and Hduration.since_epoch for
 accomplishing similar tasks.
 
 Alright, the second solution is to pass in a Hash object, as previously
 mentioned.
 
 For example:
-    duration = Duration.new(:hours => 12, :minutes => 58, :days => 14)
-    => #<Duration: 2 weeks, 12 hours and 58 minutes>
+    duration = Hduration.new(:hours => 12, :minutes => 58, :days => 14)
+    => #<Hduration: 2 weeks, 12 hours and 58 minutes>
 
 So, it works.  But also notice that I gave it `:days => 14', but it spat out
-`2 weeks'.  Yes, Duration knows what it's doing.
+`2 weeks'.  Yes, Hduration knows what it's doing.
 
 There are more keys you can pass.  Check all the keys available in the
-Duration::MULTIPLES hash to see.  All those keys are valid to pass.  Any
+Hduration::MULTIPLES hash to see.  All those keys are valid to pass.  Any
 duplicated multiples will merely be added to each other, so be careful if that's
 not the desired behavior.
 
 === Formatting
-The Duration class provides Duration#format (alias: Duration#strftime) for
+The Hduration class provides Hduration#format (alias: Hduration#strftime) for
 formatting the time units into a string.
 
-For more information on the identifiers it supports, check out Duration#format.
+For more information on the identifiers it supports, check out Hduration#format.
 
 Here's an example of how to format the known minutes in the duration:
-    duration = Duration.since_epoch
+    duration = Hduration.since_epoch
     duration.format('%~m passed: %m')
     => "minutes passed: 4"
 
@@ -118,33 +118,33 @@ you can simply read the source code of the existing locales lying within the
 modules and are not complex at all.
 
 === Arithmetic
-Duration objects support arithmetic against any object that response to the
+Hduration objects support arithmetic against any object that response to the
 #to_i method.  This is pretty self-explanatory.  What happens when you divide
 a duration by 2?
 
-    duration = Duration.since_epoch
-    => #<Duration: 1981 weeks, 4 hours, 12 minutes and 54 seconds>
+    duration = Hduration.since_epoch
+    => #<Hduration: 1981 weeks, 4 hours, 12 minutes and 54 seconds>
 
     duration / 2
-    => #<Duration: 990 weeks, 3 days, 14 hours, 6 minutes and 27 seconds>
+    => #<Hduration: 990 weeks, 3 days, 14 hours, 6 minutes and 27 seconds>
 
 Pretty simple, right?
 
 === Magical Methods
-Finally, Duration has a few magical methods that are handled through the
-#method_missing override.  Duration instances support all method calls to such
+Finally, Hduration has a few magical methods that are handled through the
+#method_missing override.  Hduration instances support all method calls to such
 methods as `round_<unit>_to_<unit>' and `<unit>_to_<unit>'.  These methods
 basically convert their <unit> to another <unit> and spit back the numbers.
 
 The `round_<unit>_to_<unit>' method rounds the converted unit.
 
-    Duration.since_epoch.weeks_to_days
+    Hduration.since_epoch.weeks_to_days
     => 13867.0
 
-    Duration.since_epoch.round_weeks_to_days
+    Hduration.since_epoch.round_weeks_to_days
     => 13867
 
-    Duration.since_epoch.weeks_to_days.round
+    Hduration.since_epoch.weeks_to_days.round
     => 13867
 
 = Feedback

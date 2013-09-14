@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-class Duration
+class Hduration
   module Localizations
     # English localization
     module English

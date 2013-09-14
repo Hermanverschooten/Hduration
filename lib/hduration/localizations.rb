@@ -6,7 +6,7 @@ require 'duration/localizations/french'
 require 'duration/localizations/dutch'
 require 'duration/localizations/polish'
 
-class Duration
+class Hduration
   # Contains localizations for the time formatters.  Standard locales cannot be
   # used because they don't define time units.
   module Localizations
@@ -14,7 +14,7 @@ class Duration
     DEFAULT_LOCALE = :en
     @@locales = {}
 
-    # Load all locales.  This is invoked automatically upon loading Duration.
+    # Load all locales.  This is invoked automatically upon loading Hduration.
     def Localizations.load_all
       locales = []
       constants.each do |constant|

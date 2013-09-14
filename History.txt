@@ -1,3 +1,6 @@
+== 0.1.2
+* Change class to Hduration to avoid a conflict with Rails 4.
+
 == 0.1.1
 
 * Numeric#weeks is actually defined this time
@@ -5,9 +8,9 @@
 * migrated to newgem schema
 * removed README, LICENSE, duration.gemspec
 * added Readme.txt, License.txt, Manifest.txt and other newgem files
-* Duration::VERSION is now a module: Duration::VERSION::{MAJOR,MINOR,TINY,STRING}
+* Hduration::VERSION is now a module: Hduration::VERSION::{MAJOR,MINOR,TINY,STRING}
 * added ::christmas and ::new_years to Time::Holidays
 * added some docs to duration/localizations/english.rb for translators to read
 * added French and Dutch localizations (thanks to Jean-François, Jean-François, Siep Korteling)
 * added Polish localization (thanks to Marcin Raczkowski)
-* added Duration.version which returns Duration::VERSION::STRING
+* added Hduration.version which returns Hduration::VERSION::STRING

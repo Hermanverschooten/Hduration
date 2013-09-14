@@ -1,20 +1,20 @@
 # -*- encoding : utf-8 -*-
-require 'duration/version'
-require 'duration/numeric'
-require 'duration/time'
-require 'duration/localizations'
-Duration::Localizations.load_all
+require 'hduration/version'
+require 'hduration/numeric'
+require 'hduration/time'
+require 'hduration/localizations'
+Hduration::Localizations.load_all
 
-# Duration objects are simple mechanisms that allow you to operate on durations
+# Hduration objects are simple mechanisms that allow you to operate on durations
 # of time.  They allow you to know how much time has passed since a certain
 # point in time, or they can tell you how much time something is (when given as
-# seconds) in different units of time measurement.  Durations would particularly
+# seconds) in different units of time measurement.  Hdurations would particularly
 # be useful for those scripts or applications that allow you to know the uptime
 # of themselves or perhaps provide a countdown until a certain event.
-class Duration
+class Hduration
   include Comparable
   include Enumerable
-  
+
   # Unit multiples
   MULTIPLES = {
     :seconds => 1,
@@ -28,41 +28,41 @@ class Duration
     :day     => 86400,
     :week    => 604800
   }
-  
+
   # Unit names
   UNITS = [:seconds, :minutes, :hours, :days, :weeks]
-  
+
   attr_reader :total, :seconds, :minutes, :hours, :days, :weeks
-  
-  # Change the locale Duration will use when converting itself to a string
-  def Duration.change_locale(locale)
+
+  # Change the locale Hduration will use when converting itself to a string
+  def Hduration.change_locale(locale)
     @@locale = Localizations.locales[locale.to_sym] or raise LocaleError, "undefined locale '#{locale}'"
   end
-  
+
   # Load default locale
   change_locale(Localizations::DEFAULT_LOCALE)
-  
-  # Constructs a Duration instance that represents the duration since the UNIX
+
+  # Constructs a Hduration instance that represents the duration since the UNIX
   # epoch (1970-01-01T00:00:00Z)
-  def Duration.since_epoch
+  def Hduration.since_epoch
     new(Time.now)
   end
-  
+
   # Calculates the duration "since" a given time.  Assumes that the time is in
   # the past.  Does not error if the time is in the present or future.
-  def Duration.since(time)
+  def Hduration.since(time)
     new(Time.now.to_i - time.to_i)
   end
-  
+
   # Calculates the duration "until" a given time.  Assumes that the time is in
   # the future.  Does not error if a time in the present or past is given.
-  def Duration.until(time)
+  def Hduration.until(time)
     new(time.to_i - Time.now.to_i)
   end
-  
+
   # Initialize a duration.  `args' can be a hash or anything else.  If a hash is
   # passed, it will be scanned for a key=>value pair of time units such as those
-  # listed in the Duration::UNITS array or Duration::MULTIPLES hash.
+  # listed in the Hduration::UNITS array or Hduration::MULTIPLES hash.
   #
   # If anything else except a hash is passed, #to_i is invoked on that object
   # and expects that it return the number of seconds desired for the duration.
@@ -78,11 +78,11 @@ class Duration
     else
       @seconds = args.to_i
     end
-    
+
     # Calculate duration
     calculate!
   end
-  
+
   # Calculates the duration from seconds and figures out what the actual
   # durations are in specific units.  This method is called internally, and
   # does not need to be called by user code.
@@ -95,22 +95,22 @@ class Duration
 			units << total / multiple
 			total % multiple # The remainder will be divided as the next largest
 		end
-		
+
 		# Gather the divided units
 		@weeks, @days, @hours, @minutes, @seconds = units
   end
-  
+
   # Compare this duration to another (or objects that respond to #to_i)
 	def <=>(other)
 		@total <=> other.to_i
 	end
-  
+
   # Convenient iterator for going through each duration unit from lowest to
   # highest.  (Goes from seconds...weeks)
   def each
     UNITS.each { |unit| yield unit, __send__(unit) }
   end
-  
+
   # Format a duration into a human-readable string.
   #
   #   %w  => weeks
@@ -127,7 +127,7 @@ class Duration
   #   %~h => locale-dependent "hours" terminology
   #   %~d => locale-dependent "days" terminology
   #   %~w => locale-dependent "weeks" terminology
-  #   
+  #
   def format(format_str)
     identifiers = {
       'w'  => @weeks,
@@ -150,7 +150,7 @@ class Duration
 			match['%%'] ? match : identifiers[match[1..-1]]
 		end.gsub('%%', '%')
   end
-  
+
   def method_missing(m, *args, &block)
     units = UNITS.join('|')
     match = /(round_)?(#{units})_to_(#{units})$/.match(m.to_s)
@@ -161,57 +161,57 @@ class Duration
       super
     end
   end
-  
-  # String representation of the Duration object.
+
+  # String representation of the Hduration object.
   def to_s
     @@locale.format.call(self)
   end
-  
-  # Inspect Duration object.
+
+  # Inspect Hduration object.
 	def inspect
 		"#<#{self.class}: #{(s = to_s).empty? ? '...' : s}>"
 	end
-	
+
 	def +(other)
-		Duration.new(@total + other.to_i)
+		Hduration.new(@total + other.to_i)
 	end
-	
+
 	def -(other)
-		Duration.new(@total - other.to_i)
+		Hduration.new(@total - other.to_i)
 	end
-	
+
 	def *(other)
-		Duration.new(@total * other.to_i)
+		Hduration.new(@total * other.to_i)
 	end
-	
+
 	def /(other)
-		Duration.new(@total / other.to_i)
+		Hduration.new(@total / other.to_i)
 	end
-	
+
 	def %(other)
-		Duration.new(@total % other.to_i)
+		Hduration.new(@total % other.to_i)
 	end
-  
+
   def seconds=(seconds)
     initialize :seconds => (@total + seconds) - @seconds
   end
-  
+
   def minutes=(minutes)
     initialize :seconds => @total - minutes_to_seconds, :minutes => minutes
   end
-  
+
   def hours=(hours)
     initialize :seconds => @total - hours_to_seconds, :hours => hours
   end
-  
+
   def days=(days)
     initialize :seconds => @total - days_to_seconds, :days => days
   end
-  
+
   def weeks=(weeks)
     initialize :seconds => @total - weeks_to_seconds, :weeks => weeks
   end
-  
+
   alias_method :to_i, :total
   alias_method :strftime, :format
 end
