@@ -1,5 +1,5 @@
 # -*- encoding : utf-8 -*-
-require 'duration/time/holidays'
+require 'hduration/time/holidays'
 
 class Time
   extend Holidays

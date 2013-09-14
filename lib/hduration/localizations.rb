@@ -1,10 +1,10 @@
 # -*- encoding : utf-8 -*-
-require 'duration/locale'
-require 'duration/localizations/english'
-require 'duration/localizations/korean'
-require 'duration/localizations/french'
-require 'duration/localizations/dutch'
-require 'duration/localizations/polish'
+require 'hduration/locale'
+require 'hduration/localizations/english'
+require 'hduration/localizations/korean'
+require 'hduration/localizations/french'
+require 'hduration/localizations/dutch'
+require 'hduration/localizations/polish'
 
 class Hduration
   # Contains localizations for the time formatters.  Standard locales cannot be

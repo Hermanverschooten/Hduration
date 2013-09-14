@@ -1,4 +1,4 @@
-== 0.1.2
+== 0.1.3
 * Change class to Hduration to avoid a conflict with Rails 4.
 
 == 0.1.1
